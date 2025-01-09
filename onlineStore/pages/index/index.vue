@@ -94,8 +94,8 @@
 				hotspotItems: [
 					{ imgSrc: "/static/img/product1.jpg", title: "商品标题1", description: "描述信息1", category: "hot" },
 					{ imgSrc: "/static/img/product2.jpg", title: "商品标题2", description: "描述信息2", category: "hot" },
-					{ imgSrc: "/static/img/product3.jpg", title: "商品标题3", description: "描述信息3", category: "recommend" },
-					{ imgSrc: "/static/img/product4.jpg", title: "商品标题4", description: "描述信息4", category: "new" },
+					{ imgSrc: "/static/img/product2.jpg", title: "商品标题3", description: "描述信息3", category: "hot" },
+					{ imgSrc: "/static/img/product1.jpg", title: "商品标题4", description: "描述信息4", category: "hot" },
 					// 更多商品
 				],
 				activeNavbar: 0, // 默认第一个选中
