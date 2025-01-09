@@ -123,6 +123,29 @@
 			onButtonClick(index) {
 				this.activeButton = index; // 设置当前高亮按钮
 			},
+			onNavClick(index) {
+				if (index === 0) {
+					// 跳转到首页
+					uni.switchTab({
+						url: '/pages/index/index'
+					});
+				} else if (index === 1) {
+					// 跳转到分类页面
+					uni.navigateTo({
+						url: '/pages/index/category'
+					});
+				} else if (index === 2) {
+					// 跳转到购物车页面
+					uni.navigateTo({
+						url: '/pages/index/shoppingCart'
+					});
+				} else if (index === 3) {
+					// 跳转到我的页面
+					uni.navigateTo({
+						url: '/pages/index/myProfile'
+					});
+				}
+			},
 		}
 	}
 </script>
