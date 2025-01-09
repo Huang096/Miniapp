@@ -26,12 +26,24 @@
 			</view>
 		</view>
 
-		<view class="hotspot-text">
-            近期热点
-        </view>
+		<view class="button-group">
+			<view
+				class="filter-button"
+				v-for="(button, index) in buttons"
+				:key="index"
+				:class="{ active: activeButton === index }"
+				@click="onButtonClick(index)"
+			>
+				{{ button.label }}
+			</view>
+			</view>
 
-		<view class="hotspot-items">
-			<view class="hotspot-item" v-for="(item, index) in hotspotItems" :key="index">
+			<view class="hotspot-items">
+			<view
+				class="hotspot-item"
+				v-for="(item, index) in filteredItems"
+				:key="index"
+			>
 				<image :src="item.imgSrc" mode="widthFix" class="item-image"></image>
 				<view class="item-info">
 				<text class="item-title">{{ item.title }}</text>
@@ -40,14 +52,19 @@
 			</view>
 		</view>
 
-
-
 		<view class="navbar">
-			<view class="nav-item" v-for="(item, index) in navbarItems" :key="index" @click="onNavClick(index)">
+			<view
+				class="nav-item"
+				v-for="(item, index) in navbarItems"
+				:key="index"
+				:class="{ active: index === 0 }"
+				@click="onNavClick(index)"
+			>
 				<i :class="item.icon" class="nav-icon"></i>
 				<text class="nav-text">{{ item.text }}</text>
 			</view>
 		</view>
+
 	</view>
 </template>
 
@@ -68,38 +85,44 @@
 					{ icon: 'fa fa-shopping-cart', text: '购物车' },
 					{ icon: 'fa fa-user', text: '我的' }
 				],
+				buttons: [
+					{ label: '近期热点', category: 'hot' },
+					{ label: '推荐商品', category: 'recommend' },
+					{ label: '新品上市', category: 'new' },
+				],
+				activeButton: 0, // 默认高亮第一个按钮
 				hotspotItems: [
-					{
-						imgSrc: "/static/img/product1.jpg",
-						title: "商品标题1",
-						description: "描述信息1"
-					},
-					{
-						imgSrc: "/static/img/product2.jpg",
-						title: "商品标题2",
-						description: "描述信息2"
-					},
-					{
-						imgSrc: "/static/img/product2.jpg",
-						title: "商品标题2",
-						description: "描述信息2"
-					},
-					{
-						imgSrc: "/static/img/product1.jpg",
-						title: "商品标题1",
-						description: "描述信息1"
-					},
-				]
+					{ imgSrc: "/static/img/product1.jpg", title: "商品标题1", description: "描述信息1", category: "hot" },
+					{ imgSrc: "/static/img/product2.jpg", title: "商品标题2", description: "描述信息2", category: "hot" },
+					{ imgSrc: "/static/img/product3.jpg", title: "商品标题3", description: "描述信息3", category: "recommend" },
+					{ imgSrc: "/static/img/product4.jpg", title: "商品标题4", description: "描述信息4", category: "new" },
+					// 更多商品
+				],
+				activeNavbar: 0, // 默认第一个选中
+				navbarItems: [
+					{ icon: 'fa fa-home', text: '首页' },
+					{ icon: 'fa fa-th', text: '分类' },
+					{ icon: 'fa fa-shopping-cart', text: '购物车' },
+					{ icon: 'fa fa-user', text: '我的' },
+				],
 			}
 		},
 		onLoad() {
 
 		},
+
+		computed: {
+			filteredItems() {
+			// 根据选中的按钮类别筛选瀑布流内容
+			const activeCategory = this.buttons[this.activeButton].category;
+			return this.hotspotItems.filter(item => item.category === activeCategory);
+			},
+		},
+
 		methods: {
-			onNavClick(index) {
-				console.log('导航项被点击:', index);
-				// 根据index来切换页面或做其他操作
-			}
+			onButtonClick(index) {
+				this.activeButton = index; // 设置当前高亮按钮
+			},
 		}
 	}
 </script>
@@ -108,10 +131,11 @@
 	.content {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
 		width: 100%;
 		overflow: hidden;
+		background: linear-gradient(to bottom, #ADD8E6, #ffffff); /* 从蓝色到白色 */
 	}
 
 	.swiper-container {
@@ -194,19 +218,50 @@
 	}
 
 	.hotspot-text {
-        width: 100%; /* 确保宽度占满容器 */
-        text-align: left; /* 文字居中 */
-        font-size: 30rpx; /* 设置字体大小 */
-		font-weight: bold;
-        color: #333; /* 设置字体颜色 */
-        margin: 50rpx 0; /* 上下边距，根据需要调整 */
-		margin-left: 50rpx;
-    }
+		display: block; /* 让整个框单独占一行 */
+		width: auto; /* 根据内容自适应宽度 */
+		text-align: left; /* 确保文字内容左对齐 */
+		font-size: 35rpx; /* 字体大小 */
+		font-weight: bold; /* 字体加粗 */
+		color: #333; /* 设置文字颜色 */
+		margin: 50rpx 0; /* 上下边距 */
+		margin-left: 20rpx; /* 左边距，让框靠左 */
+		background-color: #fff; /* 背景颜色 */
+		border-radius: 20rpx; /* 圆角边框 */
+		padding: 10rpx 40rpx; /* 内边距 */
+		box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1); /* 添加阴影 */
+	}
+
+	.button-group {
+		display: flex;
+		justify-content: space-around; /* 按钮靠左对齐 */
+		margin: 20rpx; /* 外边距 */
+		gap: 10rpx; /* 按钮间距 */
+		width:100%;
+	}
+
+	.filter-button {
+		padding: 10rpx 20rpx;
+		background-color: #fff; /* 默认背景色 */
+		color: #333;
+		border: 1rpx solid #ccc;
+		border-radius: 20rpx;
+		font-size: 28rpx;
+		cursor: pointer;
+		transition: all 0.3s ease; /* 添加过渡动画 */
+	}
+
+	.filter-button.active {
+		background-color: #77cfed; /* 高亮时背景色变浅蓝 */
+		color: #fff; /* 高亮时文字变白 */
+		border-color: #87CEEB; /* 边框变浅蓝 */
+	}
 
     .hotspot-items {
 		column-count: 2; /* 设置两列 */
 		column-gap: 16px; /* 列间距 */
 		width: 100%; /* 占满宽度 */
+		padding-bottom: 80px; /* 预留出 navbar 的高度，80px 是你的 navbar 高度 */
 	}
 
 	.hotspot-item {
@@ -216,6 +271,7 @@
 		overflow: hidden;
 		box-sizing: border-box; /* 边框和内边距包含在宽度内 */
 		break-inside: avoid; /* 防止item被拆分到不同列 */
+		background-color: #fff;
 	}
 
 
@@ -248,25 +304,30 @@
 	}
 
 	.navbar {
-        display: flex;
-        justify-content: space-around;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 80px; /* 可以根据需要调整高度 */
-        background-color: #fff;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    }
+		display: flex;
+		justify-content: space-around;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 80px; /* 导航栏高度 */
+		background-color: #fff;
+		box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+	}
 
     .nav-item {
-        flex-grow: 1;
-        text-align: center;
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+		flex-grow: 1;
+		text-align: center;
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		color: #666; /* 默认文字颜色 */
+	}
+
+	.nav-item.active {
+		color: #1E90FF; /* 高亮文字和图标颜色（蓝色） */
+	}
 
     .nav-icon {
         width: 24px; /* 根据需要调整 */
