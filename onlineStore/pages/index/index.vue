@@ -64,7 +64,6 @@
 				<text class="nav-text">{{ item.text }}</text>
 			</view>
 		</view>
-
 	</view>
 </template>
 
@@ -79,6 +78,7 @@
 					{ imgSrc: "/static/img/icon3.jpg", text: "图标三" },
 					{ imgSrc: "/static/img/icon4.jpg", text: "图标四" }
 				],
+				activeNavbar: 0, // 默认第一个选中
 				navbarItems: [
 					{ icon: 'fa fa-home', text: '首页' },
 					{ icon: 'fa fa-th', text: '分类' },
@@ -97,13 +97,6 @@
 					{ imgSrc: "/static/img/product2.jpg", title: "商品标题3", description: "描述信息3", category: "hot" },
 					{ imgSrc: "/static/img/product1.jpg", title: "商品标题4", description: "描述信息4", category: "hot" },
 					// 更多商品
-				],
-				activeNavbar: 0, // 默认第一个选中
-				navbarItems: [
-					{ icon: 'fa fa-home', text: '首页' },
-					{ icon: 'fa fa-th', text: '分类' },
-					{ icon: 'fa fa-shopping-cart', text: '购物车' },
-					{ icon: 'fa fa-user', text: '我的' },
 				],
 			}
 		},
@@ -126,7 +119,7 @@
 			onNavClick(index) {
 				if (index === 0) {
 					// 跳转到首页
-					uni.switchTab({
+					uni.navigateTo({
 						url: '/pages/index/index'
 					});
 				} else if (index === 1) {
